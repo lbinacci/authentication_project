@@ -1,3 +1,7 @@
-from utils.mysql_utils import init_mysql_db
+from utils.mysql_utils import init_mysql_users_db
+import logging
 
-init_mysql_db()
+try:
+    init_mysql_users_db()
+except Exception as e:
+    logging.error("can't create table, error:" + str(e))
