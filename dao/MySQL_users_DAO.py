@@ -27,7 +27,8 @@ class MySqlUsersDao:
         self.password = password
         self.database_name = database_name
 
-    def insert_user(self, username: str, password: str, email: str, birthdate: str, first_name: str, last_name: str, two_factor_auth: bool):
+    def insert_user(self, username: str, password: str, email: str, birthdate: str, first_name: str, last_name: str,
+                    two_factor_auth: bool):
         """
         It takes in a bunch of user information and inserts it into the database.
         
@@ -58,21 +59,24 @@ class MySqlUsersDao:
 
         engine.dispose()
 
-    def get_user(self, user):
+    def get_user(self, username: str = None, email: str = None):
         engine = create_engine(f"mysql://{self.username}:{self.password}@{self.host}/{self.database_name}")
         session_maker = sessionmaker(bind=engine)
         session = session_maker()
 
         # restituisce None se non trova nulla
-        user = session.query(User).filter_by(username=user).first()
+        if username:
+            query_result = session.query(User).filter_by(username=username).first()
+        else:
+            query_result = session.query(User).filter_by(email=email).first()
 
         engine.dispose()
-        return user
+        return query_result
 
 
 # insert_user("ewqewewdq", "brtewqeudsades", "dsdads@dsa2dsa.com", "1990-01-01", "John", "Doe", False)
 if __name__ == '__main__':
     db = MySqlUsersDao("localhost", "user", "password", "users_db")
 
-    print(db.get_user("ese"))
-    db.insert_user("ewqewew3213123dq", "brtewqeudsades", "dsdads@dsa2321dsa.com", "1990-01-01", "John", "Doe", False)
+    print(db.get_user("mauretto"))
+    # db.insert_user("ewqewew3213123dq", "brtewqeudsades", "dsdads@dsa2321dsa.com", "1990-01-01", "John", "Doe", False)
