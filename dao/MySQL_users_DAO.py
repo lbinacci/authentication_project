@@ -79,4 +79,4 @@ if __name__ == '__main__':
     db = MySqlUsersDao("localhost", "user", "password", "users_db")
 
     print(db.get_user("mauretto"))
-    # db.insert_user("ewqewew3213123dq", "brtewqeudsades", "dsdads@dsa2321dsa.com", "1990-01-01", "John", "Doe", False)
+    db.insert_user("ewqewew3213123dq", "brtewqeudsades", "dsdads@dsa2321dsa.com", "1990-01-01", "John", "Doe", False)

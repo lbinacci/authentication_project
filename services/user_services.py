@@ -32,6 +32,12 @@ def registration():
         if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
             return jsonify({'error': 'Invalid email format'}), 400
 
+        try:
+            db.insert_user(username, request.form['password'], email, request.form['mail'], request.form['first_name'],
+                           request.form['last_name'], request.form['otp'])
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
         return jsonify({'message': 'User registered successfully'}), 201
 
 
