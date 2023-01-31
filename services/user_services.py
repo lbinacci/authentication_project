@@ -1,7 +1,6 @@
 import re
-
 from flask import Flask, request, jsonify, redirect, render_template, url_for
-from flask_login import LoginManager, login_user, login_required
+from flask_login import LoginManager, login_user, login_required, current_user
 from config.app_config import MysqlConfiguration
 from dao.MySQL_users_DAO import MySqlUsersDao
 from utils.flask_utils import User
@@ -34,9 +33,11 @@ def registration_form():
 def login_template():
     return render_template('login.html')
 
-
-def two_fa_template():
-    return render_template('otp.html')
+@app.route('/two_fa_login')
+def two_fa_login():
+    if current_user.is_authenticated and db.get_user(id=current_user.get_id()):
+        print('ciao')
+        return render_template('otp.html')
 
 
 @app.route('/example')
@@ -57,14 +58,14 @@ def login():
         # if 2fa is enabled
         if query_result.two_factor_auth:
 
-            return redirect("two_fa_login")
+            return redirect(url_for("two_fa_login"))
 
         else:
             # logged in
             user = User(query_result.id, query_result.username, query_result.password, query_result.email)
             login_user(user)
-            return redirect(url_for("example"))
-            # return jsonify({'message': 'User logged successfully'}), 201
+            # return redirect(url_for("example"))
+            return jsonify({'message': 'User logged successfully'}), 201
     elif not query_result:
         return jsonify({'message': 'User: ' + response.get('username') + ' doesnt exist'}), 208
     # gestire password
@@ -92,9 +93,9 @@ def registration():
         return jsonify({'message': 'User registered successfully'}), 201
 
 
-@app.route('/2fa_login', methods=['POST'])
-def two_fa_login():
-    pass
+# @app.route('/2fa_login', methods=['POST'])
+# def two_fa_login():
+#     pass
 
 
 app.run()

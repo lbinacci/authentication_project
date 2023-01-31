@@ -66,6 +66,11 @@ class MySqlUsersDao:
         engine.dispose()
         return query_result
 
+    # def update_user(self, **kwargs):
+    #     engine, session = self.create_session()
+    #     session.
+
+
     def login_user(self, username, password):
 
         # engine, session = self.create_session()

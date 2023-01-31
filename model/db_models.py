@@ -15,3 +15,7 @@ class User(Base):
     first_name = Column(String(255))
     last_name = Column(String(255))
     two_factor_auth = Column(Boolean)
+    otp = Column(String(255))
+
+
+
