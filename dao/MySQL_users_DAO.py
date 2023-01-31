@@ -28,7 +28,7 @@ class MySqlUsersDao:
         self.database_name = database_name
 
     def insert_user(self, username: str, password: str, email: str, birthdate: str, first_name: str, last_name: str,
-                    two_factor_auth: bool):
+                    two_factor_auth: bool = False):
         """
         It takes in a bunch of user information and inserts it into the database.
         
@@ -41,9 +41,8 @@ class MySqlUsersDao:
         :param two_factor_auth: boolean
         """
 
-        engine = create_engine(f"mysql://{self.username}:{self.password}@{self.host}/{self.database_name}")
-        session_maker = sessionmaker(bind=engine)
-        session = session_maker()
+        engine, session = self.create_session()
+
         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
         new_user = User(
             username=username,
@@ -52,28 +51,32 @@ class MySqlUsersDao:
             birthdate=birthdate,
             first_name=first_name,
             last_name=last_name,
-            two_factor_auth=two_factor_auth
+            two_factor_auth=two_factor_auth if two_factor_auth else False
         )
         session.add(new_user)
         session.commit()
 
         engine.dispose()
 
-    def get_user(self, username: str = None, email: str = None):
-        engine = create_engine(f"mysql://{self.username}:{self.password}@{self.host}/{self.database_name}")
-        session_maker = sessionmaker(bind=engine)
-        session = session_maker()
-
+    def get_user(self, **kwargs):
+        engine, session = self.create_session()
         # restituisce None se non trova nulla
-        if username:
-            query_result = session.query(User).filter_by(username=username).first()
-        else:
-            query_result = session.query(User).filter_by(email=email).first()
+        query_result = session.query(User).filter_by(**kwargs).first()
 
         engine.dispose()
         return query_result
 
+    def login_user(self, username, password):
 
+        # engine, session = self.create_session()
+        # if bcrypt.checkpw(password_to_check, hashed):
+        pass
+    def create_session(self):
+        engine = create_engine(f"mysql://{self.username}:{self.password}@{self.host}/{self.database_name}")
+        session_maker = sessionmaker(bind=engine)
+        session = session_maker()
+
+        return engine, session
 # insert_user("ewqewewdq", "brtewqeudsades", "dsdads@dsa2dsa.com", "1990-01-01", "John", "Doe", False)
 if __name__ == '__main__':
     db = MySqlUsersDao("localhost", "user", "password", "users_db")

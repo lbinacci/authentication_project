@@ -1,8 +1,8 @@
 import bcrypt
 
 
-def psw_check(password_to_check, hashed):
-    if bcrypt.checkpw(password_to_check, hashed):\
+def psw_check(password_to_check, hashed_password):
+    if bcrypt.checkpw(password_to_check, hashed_password):
         # password match
         return True
     else:
