@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 
+
 import bcrypt
 import mysql.connector
 from mysql.connector import MySQLConnection
@@ -66,10 +67,15 @@ class MySqlUsersDao:
         engine.dispose()
         return query_result
 
-    # def update_user(self, **kwargs):
-    #     engine, session = self.create_session()
-    #     session.
+    def update_user(self, user, **kwargs):
+        engine, session = self.create_session()
 
+        query_result = session.query(User).filter_by(username=user).update({**kwargs})
+        session.commit()
+
+        engine.dispose()
+
+        return query_result
 
     def login_user(self, username, password):
 
@@ -86,5 +92,6 @@ class MySqlUsersDao:
 if __name__ == '__main__':
     db = MySqlUsersDao("localhost", "user", "password", "users_db")
 
-    print(db.get_user("mauretto"))
-    db.insert_user("ewqewew3213123dq", "brtewqeudsades", "dsdads@dsa2321dsa.com", "1990-01-01", "John", "Doe", False)
+    # print(db.get_user("mauretto"))
+    # db.insert_user("ewqewew3213123dq", "brtewqeudsades", "dsdads@dsa2321dsa.com", "1990-01-01", "John", "Doe", False)
+    db.update_user(user="franco", otp=11112222)

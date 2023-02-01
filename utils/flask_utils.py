@@ -8,3 +8,8 @@ class User(UserMixin):
       self.password = password
       self.email = email
 
+   def is_authenticated(self):
+      return True
+   def is_anonymous(self):
+      return False
+
