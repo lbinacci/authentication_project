@@ -5,29 +5,29 @@ This is a Flask Python web application code that provides user registration and 
 
 ####################### API FRONT-END ############################
 
-http://127.0.0.1:5000/registration:
+http://127.0.0.1:5000/registration
 
 This endpoint returns the registration form for creating a new user account.
 
-http://127.0.0.1:5000/login:
+http://127.0.0.1:5000/login
 
 This endpoint returns the login form for an existing user.
 
-http://127.0.0.1:5000/logout:
+http://127.0.0.1:5000/logout
 
 This endpoint in needed to logout the user
 
-http://127.0.0.1:5000/logged_in:
+http://127.0.0.1:5000/logged_in
 
 This endpoint returns a html page when the user perform a succesful login. Access to this endpoint requires a valid login.
 
-http://127.0.0.1:5000/two_fa_login_template:
+http://127.0.0.1:5000/two_fa_login_template
 
 This endpoint returns the template for two-factor authentication, which is triggered when the user has enabled 2FA for their account. If the user is not logged in or if their account does not exist, they will be redirected to the login page.
 
 ######################## API BACK-END #############################
 
-http://127.0.0.1:5000/login_user:
+http://127.0.0.1:5000/login_user
 { 
 "username": str,
 "password": str 
@@ -35,7 +35,7 @@ http://127.0.0.1:5000/login_user:
 
 This endpoint logs in a user. If the user's account exists and their password is correct, they will either be logged in directly if 2FA is not enabled, or they will be redirected to the 2FA template if it is enabled.
 
-http://127.0.0.1:5000/register_user:
+http://127.0.0.1:5000/register_user
 {            
 "username": str,
 "password": str,
@@ -47,7 +47,7 @@ http://127.0.0.1:5000/register_user:
 }
 This endpoint creates a new user account. The API takes in the following parameters: username, password, email, birthdate, first_name, last_name, and otp (a flag for enabling 2FA). If the provided username or email already exists, the API will return an error. If the provided email is in an invalid format, the API will return an error. If the account is created successfully, the API will return a success message.
 
-http://127.0.0.1:5000/two_fa_login:
+http://127.0.0.1:5000/two_fa_login
 { 
 "otp": str 
 }
