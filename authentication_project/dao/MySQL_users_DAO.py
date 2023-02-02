@@ -1,10 +1,4 @@
-from dataclasses import dataclass
-from datetime import datetime
-
-
 import bcrypt
-import mysql.connector
-from mysql.connector import MySQLConnection
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -78,16 +72,18 @@ class MySqlUsersDao:
         return query_result
 
     def login_user(self, username, password):
-
         # engine, session = self.create_session()
         # if bcrypt.checkpw(password_to_check, hashed):
         pass
+
     def create_session(self):
         engine = create_engine(f"mysql://{self.username}:{self.password}@{self.host}/{self.database_name}")
         session_maker = sessionmaker(bind=engine)
         session = session_maker()
 
         return engine, session
+
+
 # insert_user("ewqewewdq", "brtewqeudsades", "dsdads@dsa2dsa.com", "1990-01-01", "John", "Doe", False)
 if __name__ == '__main__':
     db = MySqlUsersDao("localhost", "user", "password", "users_db")

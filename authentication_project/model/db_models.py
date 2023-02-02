@@ -1,7 +1,6 @@
 from flask_login import UserMixin
-from sqlalchemy.ext.declarative import declarative_base
-
 from sqlalchemy import Column, String, Date, Boolean, Integer
+from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
@@ -17,6 +16,3 @@ class User(Base, UserMixin):
     last_name = Column(String(255))
     two_factor_auth = Column(Boolean)
     otp = Column(String(255))
-
-
-

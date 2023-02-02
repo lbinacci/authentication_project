@@ -1,13 +1,14 @@
 import re
+
 from flask import Flask, request, jsonify, redirect, render_template, url_for, flash
-from flask_login import LoginManager, login_user, login_required, logout_user, current_user
+from flask import session
+from flask_login import LoginManager, login_user, login_required, logout_user
+
 from config.app_config import MysqlConfiguration
 from config.app_constants import PSW, MAIL, USERNAME, BIRTHDATE, FIRST_NAME, LAST_NAME
 from dao.MySQL_users_DAO import MySqlUsersDao
 from utils.flask_utils import User
 from utils.login_utils import psw_check
-from flask import session
-
 from utils.send_email import send_otp_mail
 
 app = Flask(__name__, template_folder='templates')
@@ -15,7 +16,6 @@ app.secret_key = "a_secret_key"
 
 login_manager = LoginManager(app)
 login_manager.init_app(app)
-# login_manager.login_view = 'login'
 
 db = MySqlUsersDao(MysqlConfiguration.HOST.value, MysqlConfiguration.USER.value,
                    MysqlConfiguration.PASSWORD.value, MysqlConfiguration.DATABASE.value)
@@ -37,7 +37,6 @@ def logged_in_template():
     return render_template('logged_in.html')
 
 
-
 @app.route('/two_fa_login_template')
 def two_fa_login_template():
     if USERNAME not in session:
@@ -49,8 +48,6 @@ def two_fa_login_template():
         return redirect(url_for('login_template'))
     db.update_user(user=user.username, otp=send_otp_mail())
     return render_template('otp.html')
-
-
 
 
 @app.route('/login_user', methods=['POST'])
@@ -115,7 +112,6 @@ def two_fa_login():
 
     # if the otp is correct login in
     if user.otp == response.get('otp'):
-
         user = User(user.id, user.username, user.password, user.email)
         login_user(user)
         return redirect(url_for("logged_in_template"))
@@ -138,6 +134,3 @@ def load_user(id):
         return user
     else:
         return None
-
-
-app.run()
