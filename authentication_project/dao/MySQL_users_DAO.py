@@ -5,12 +5,10 @@ from sqlalchemy.orm import sessionmaker
 from model.db_models import User, Base
 
 
+# A class that is used to connect to the database and perform CRUD operations.
 class MySqlUsersDao:
     def __init__(self, host, username, password, database_name):
         """
-        The above function is a constructor that takes in the host, username, password, and database name as
-        parameters and assigns them to the class variables.
-        
         :param host: The hostname of the database server. This is usually localhost, meaning the database
         server is running on the same computer as the Python script
         :param username: The username you use to log into your database
@@ -25,7 +23,7 @@ class MySqlUsersDao:
     def insert_user(self, username: str, password: str, email: str, birthdate: str, first_name: str, last_name: str,
                     two_factor_auth: bool = False):
         """
-        It takes in a bunch of user information and inserts it into the database.
+        It takes in a bunch of user informations and insert them into the database.
         
         :param username: string
         :param password: the password the user entered
@@ -54,6 +52,10 @@ class MySqlUsersDao:
         engine.dispose()
 
     def get_user(self, **kwargs):
+        """
+        it take a set of keyword arguments and query the result depending on given argument
+        :return: A User object
+        """
         engine, session = self.create_session()
         # restituisce None se non trova nulla
         query_result = session.query(User).filter_by(**kwargs).first()
@@ -62,6 +64,12 @@ class MySqlUsersDao:
         return query_result
 
     def update_user(self, user, **kwargs):
+        """
+        It takes a user and a set of keyword arguments, updates the user with the keyword arguments
+        
+        :param user: The username of the user you want to update
+        :return: The number of rows updated.
+        """
         engine, session = self.create_session()
 
         query_result = session.query(User).filter_by(username=user).update({**kwargs})
@@ -77,7 +85,9 @@ class MySqlUsersDao:
         pass
 
     def create_session(self):
-        engine = create_engine(f"mysql+mysqlconnector://{self.username}:{self.password}@{self.host}/{self.database_name}")
+        """ this function create the connection with mysql DB"""
+        engine = create_engine(
+            f"mysql+mysqlconnector://{self.username}:{self.password}@{self.host}/{self.database_name}")
         session_maker = sessionmaker(bind=engine)
         session = session_maker()
 
