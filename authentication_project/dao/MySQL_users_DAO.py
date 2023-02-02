@@ -2,7 +2,7 @@ import bcrypt
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from model.db_models import User
+from model.db_models import User, Base
 
 
 class MySqlUsersDao:
@@ -77,11 +77,14 @@ class MySqlUsersDao:
         pass
 
     def create_session(self):
-        engine = create_engine(f"mysql://{self.username}:{self.password}@{self.host}/{self.database_name}")
+        engine = create_engine(f"mysql+mysqlconnector://{self.username}:{self.password}@{self.host}/{self.database_name}")
         session_maker = sessionmaker(bind=engine)
         session = session_maker()
 
         return engine, session
+
+    # def init_table(self):
+    #     engine = create_engine(f"mysql+mysqlconnector://{self.username}:{self.password}@{self.host}/{self.database_name}")
 
 
 # insert_user("ewqewewdq", "brtewqeudsades", "dsdads@dsa2dsa.com", "1990-01-01", "John", "Doe", False)

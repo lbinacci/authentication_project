@@ -46,7 +46,9 @@ def two_fa_login_template():
     if user is None:
         flash('something went wrong')
         return redirect(url_for('login_template'))
-    db.update_user(user=user.username, otp=send_otp_mail())
+    otp = send_otp_mail()
+    print(otp)
+    db.update_user(user=user.username, otp=otp)
     return render_template('otp.html')
 
 

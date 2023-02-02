@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class MysqlConfiguration(Enum):
-    HOST = "localhost"
+    HOST = "db"
     USER = "user"
     PASSWORD = "password"
     DATABASE = "users_db"

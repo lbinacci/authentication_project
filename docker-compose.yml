@@ -1,4 +1,13 @@
 services:
+
+  auth:
+    image: auth
+    container_name: auth_service
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+
   db:
     image: mysql/mysql-server
     container_name: users_db
