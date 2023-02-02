@@ -32,7 +32,6 @@ class MySqlUsersDaoTest(unittest.TestCase):
         self.assertEqual(user.two_factor_auth, self.two_factor_auth)
 
     def test_update_user(self):
-        # self.db.insert_user(self.username, self.password, self.email, self.birthdate, self.first_name, self.last_name, self.two_factor_auth)
         new_otp = '11112222'
         self.db.update_user(user=self.username, otp=new_otp)
         user = self.db.get_user(username=self.username)

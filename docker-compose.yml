@@ -1,7 +1,7 @@
 services:
 
   auth:
-    image: auth
+    image: mrbeena/auth_project
     container_name: auth_service
     ports:
       - "5000:5000"
