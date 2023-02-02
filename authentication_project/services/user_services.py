@@ -23,29 +23,49 @@ db = MySqlUsersDao(MysqlConfiguration.HOST.value, MysqlConfiguration.USER.value,
 
 @app.route('/registration')
 def registration_form():
+    """
+    It renders the registration.html template.
+    :return: The registration.html file
+    """
     return render_template('registration.html')
 
 
 @app.route('/login')
 def login_template():
+    """
+    It returns the rendered template of the login.html file.
+    :return: the rendered template.
+    """
     return render_template('login.html')
 
 
 @app.route('/logged_in')
 @login_required
 def logged_in_template():
+    """
+    It returns the rendered template 'logged_in.html' only if the user is logged
+    :return: the render_template function.
+    """
     return render_template('logged_in.html')
 
 
 @app.route('/two_fa_login_template')
 def two_fa_login_template():
+    """
+    this service can only be accessed by a session logged user and renders the template needed to insert the OTP 
+    :return: the rendered template.
+    """
+    # if you are not in session
     if USERNAME not in session:
         return redirect(url_for('login_template'))
     user = db.get_user(username=session[USERNAME])
 
+    # if can't find user in db
     if user is None:
         flash('something went wrong')
         return redirect(url_for('login_template'))
+    
+    # send fake email (create OTP)
     otp = send_otp_mail()
     print(otp)
     db.update_user(user=user.username, otp=otp)
@@ -54,6 +74,9 @@ def two_fa_login_template():
 
 @app.route('/login_user', methods=['POST'])
 def login_user_back():
+    """
+    login API, here you can login with your username. it doens't matter if otp is abilitated or not 
+    """
     response = request.form
     # query to get user data
     query_result = db.get_user(username=response.get(USERNAME))
@@ -78,6 +101,9 @@ def login_user_back():
 
 @app.route('/register_user', methods=['POST'])
 def registration():
+    """
+    registration API, it takes in input the informations needed to create a user
+    """
     if request.method == 'POST':
         response = request.form
         # date must have form year-month-day
@@ -101,6 +127,11 @@ def registration():
 
 @app.route('/two_fa_login', methods=['POST'])
 def two_fa_login():
+    """
+    If the user is active, check if the user exists, if the user exists, check if the otp is correct, if
+    the otp is correct, login in
+    :return: a redirect to the login_template.
+    """
     response = request.form
     # check if the user is active
     if USERNAME not in session:
@@ -124,6 +155,10 @@ def two_fa_login():
 @app.route("/logout")
 @login_required
 def logout_user_():
+    """
+    It logs out the user and redirects to the login page
+    :return: the redirect function.
+    """
     logout_user()
     session.pop(USERNAME, None)
     return redirect(url_for("login_template"))
@@ -131,6 +166,9 @@ def logout_user_():
 
 @login_manager.user_loader
 def load_user(id):
+    """
+    function mandatory to load user for flask-login
+    """
     user = db.get_user(id=id)
     if user:
         return user
