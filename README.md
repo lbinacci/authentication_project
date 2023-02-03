@@ -58,7 +58,10 @@ This endpoint logs in a user with 2FA. The API takes in the following parameter:
 to start the project you just need to download the docker-image "docker pull mrbeena/auth_project".
 Next you can do "docker-compose up". Now the project should be running.
 
-Now you can start register, login, login with OTP and login using the front-end api.
+Now you can start register, login and login with OTP with the front-end api.
 
+#########################################################
 
 The versioning is in ppom.json
+
+tests are in test package
